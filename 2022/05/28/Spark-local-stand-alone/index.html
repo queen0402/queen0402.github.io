@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="theme-color" content="#33474d">
+	<title>Spark local&amp; stand-alone配置 | Hexo</title>
+	<link rel="stylesheet" href="/css/style.css" />
+	
+      <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+
+	<header class="header">
+		<nav class="header__nav">
+			
+				<a href="/archives" class="header__link">Archive</a>
+			
+				<a href="/tags" class="header__link">Tags</a>
+			
+				<a href="/atom.xml" class="header__link">RSS</a>
+			
+		</nav>
+		<h1 class="header__title"><a href="/">Hexo</a></h1>
+		<h2 class="header__subtitle"></h2>
+	</header>
+
+	<main>
+		<article>
+	
+		<h1>Spark local&amp; stand-alone配置</h1>
+	
+	<div class="article__infos">
+		<span class="article__date">2022-05-28</span><br />
+		
+		
+			<span class="article__tags">
+			  	<a class="article__tag-none-link" href="/tags/spark/" rel="tag">spark</a>
+			</span>
+		
+	</div>
+
+	
+
+	
+		<p>Welcome to you</p>
+<h2 id="Spark安装配置"><a href="#Spark安装配置" class="headerlink" title="Spark安装配置"></a>Spark安装配置</h2><h3 id="Spark-local模式"><a href="#Spark-local模式" class="headerlink" title="Spark-local模式"></a>Spark-local模式</h3><h4 id="Anaconda-On-Linux-安装-单台服务器脚本安装"><a href="#Anaconda-On-Linux-安装-单台服务器脚本安装" class="headerlink" title="Anaconda On Linux 安装 (单台服务器脚本安装)"></a>Anaconda On Linux 安装 (单台服务器脚本安装)</h4><h4 id="安装上传安装包-资料中提供的Anaconda3-2021-05-Linux-x86-64-sh文件到Linux服务器上安装-位置在-x2F-export-x2F-server"><a href="#安装上传安装包-资料中提供的Anaconda3-2021-05-Linux-x86-64-sh文件到Linux服务器上安装-位置在-x2F-export-x2F-server" class="headerlink" title="安装上传安装包: 资料中提供的Anaconda3-2021.05-Linux-x86_64.sh文件到Linux服务器上安装 位置在 &#x2F;export&#x2F;server"></a>安装上传安装包: 资料中提供的Anaconda3-2021.05-Linux-x86_64.sh文件到Linux服务器上安装 位置在 &#x2F;export&#x2F;server</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server</span><br><span class="line"># 运行文件</span><br><span class="line">sh Anaconda3-2021.05-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">过程显示：</span><br><span class="line">...</span><br><span class="line"># 出现内容选 yes</span><br><span class="line">Please answer &#x27;yes&#x27; or &#x27;no&#x27;:&#x27;</span><br><span class="line">&gt;&gt;&gt; yes</span><br><span class="line">...</span><br><span class="line"># 出现添加路径：/export/server/anaconda3</span><br><span class="line">...</span><br><span class="line">[/root/anaconda3] &gt;&gt;&gt; /export/server/anaconda3</span><br><span class="line">PREFIX=/export/server/anaconda3</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装完成后-退出终端，-重新进来"><a href="#安装完成后-退出终端，-重新进来" class="headerlink" title="安装完成后, 退出终端， 重新进来"></a>安装完成后, 退出终端， 重新进来</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">结果显示：</span><br><span class="line"># 看到这个Base开头表明安装好了.base是默认的虚拟环境.</span><br><span class="line">Last login: Tue Mar 15 15:28:59 2022 from 192.168.88.1</span><br><span class="line">(base) [root@master ~]#</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建虚拟环境-pyspark-基于-python3-8"><a href="#创建虚拟环境-pyspark-基于-python3-8" class="headerlink" title="创建虚拟环境 pyspark 基于 python3.8"></a>创建虚拟环境 pyspark 基于 python3.8</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n pyspark python=3.8</span><br></pre></td></tr></table></figure>
+
+<h4 id="切换到虚拟环境内"><a href="#切换到虚拟环境内" class="headerlink" title="切换到虚拟环境内"></a>切换到虚拟环境内</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate pyspark</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">结果显示：</span><br><span class="line">(base) [root@master ~]# conda activate pyspark</span><br><span class="line">(pyspark) [root@master ~]#</span><br></pre></td></tr></table></figure>
+
+<h4 id="在虚拟环境内安装包-（有WARNING不用管）"><a href="#在虚拟环境内安装包-（有WARNING不用管）" class="headerlink" title="在虚拟环境内安装包 （有WARNING不用管）"></a>在虚拟环境内安装包 （有WARNING不用管）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyhive pyspark jieba -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+
+<h4 id="spark-安装"><a href="#spark-安装" class="headerlink" title="spark 安装"></a>spark 安装</h4><h4 id="将文件上传到-x2F-export-x2F-server-里面-，解压"><a href="#将文件上传到-x2F-export-x2F-server-里面-，解压" class="headerlink" title="将文件上传到 &#x2F;export&#x2F;server 里面 ，解压"></a>将文件上传到 &#x2F;export&#x2F;server 里面 ，解压</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server</span><br><span class="line"># 解压</span><br><span class="line">tar -zxvf spark-3.2.0-bin-hadoop3.2.tgz -C /export/server/</span><br></pre></td></tr></table></figure>
+
+<h4 id="建立软连接"><a href="#建立软连接" class="headerlink" title="建立软连接"></a>建立软连接</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</span><br></pre></td></tr></table></figure>
+
+<h4 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h4><p>SPARK_HOME: 表示Spark安装路径在哪里 </p>
+<p>PYSPARK_PYTHON: 表示Spark想运行Python程序, 那么去哪里找python执行器 </p>
+<p>JAVA_HOME: 告知Spark Java在哪里 </p>
+<p>HADOOP_CONF_DIR: 告知Spark Hadoop的配置文件在哪里 </p>
+<p>HADOOP_HOME: 告知Spark Hadoop安装在哪里</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line">内容：</span><br><span class="line">.....</span><br><span class="line">注：此部分之前配置过，此部分不需要在配置</span><br><span class="line">#JAVA_HOME</span><br><span class="line">export JAVA_HOME=/export/server/jdk1.8.0_241</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin</span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">#HADOOP_HOME</span><br><span class="line">export HADOOP_HOME=/export/server/hadoop-3.3.0</span><br><span class="line">export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br><span class="line">#ZOOKEEPER_HOME</span><br><span class="line">export ZOOKEEPER_HOME=/export/server/zookeeper</span><br><span class="line">export PATH=$PATH:$ZOOKEEPER_HOME/bin</span><br><span class="line">.....</span><br><span class="line"># 将以下部分添加进去</span><br><span class="line">#SPARK_HOME</span><br><span class="line">export SPARK_HOME=/export/server/spark</span><br><span class="line">#HADOOP_CONF_DIR</span><br><span class="line">export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop</span><br><span class="line">#PYSPARK_PYTHON</span><br><span class="line">export PYSPARK_PYTHON=/export/server/anaconda3/envs/pyspark/bin/python</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim .bashrc</span><br><span class="line">内容添加进去：</span><br><span class="line">#JAVA_HOME</span><br><span class="line">export JAVA_HOME=/export/server/jdk1.8.0_241</span><br><span class="line">#PYSPARK_PYTHON</span><br><span class="line">export PYSPARK_PYTHON=/export/server/anaconda3/envs/pyspark/bin/python</span><br></pre></td></tr></table></figure>
+
+<h4 id="重新加载环境变量文件"><a href="#重新加载环境变量文件" class="headerlink" title="重新加载环境变量文件"></a>重新加载环境变量文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h4 id="进入-x2F-export-x2F-server-x2F-anaconda3-x2F-envs-x2F-pyspark-x2F-bin-x2F-文件夹"><a href="#进入-x2F-export-x2F-server-x2F-anaconda3-x2F-envs-x2F-pyspark-x2F-bin-x2F-文件夹" class="headerlink" title="进入 &#x2F;export&#x2F;server&#x2F;anaconda3&#x2F;envs&#x2F;pyspark&#x2F;bin&#x2F; 文件夹"></a>进入 &#x2F;export&#x2F;server&#x2F;anaconda3&#x2F;envs&#x2F;pyspark&#x2F;bin&#x2F; 文件夹</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/anaconda3/envs/pyspark/bin/</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启"><a href="#开启" class="headerlink" title="开启"></a>开启</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./pyspark</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">结果显示：</span><br><span class="line">(base) [root@master bin]# ./pyspark</span><br><span class="line">Python 3.8.12 (default, Oct 12 2021, 13:49:34)</span><br><span class="line">[GCC 7.5.0] :: Anaconda, Inc. on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">Setting default log level to &quot;WARN&quot;.</span><br><span class="line">To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use</span><br><span class="line">setLogLevel(newLevel).</span><br><span class="line">2022-03-15 20:37:04,612 WARN util.NativeCodeLoader: Unable to load nativehadoop library for your platform... using builtin-java classes where</span><br><span class="line">applicable</span><br><span class="line">Welcome to</span><br><span class="line">____ __</span><br><span class="line">/ __/__ ___ _____/ /__</span><br><span class="line">_\ \/ _ \/ _ `/ __/ &#x27;_/</span><br><span class="line">/__ / .__/\_,_/_/ /_/\_\ version 3.2.0</span><br><span class="line">/_/</span><br><span class="line">Using Python version 3.8.12 (default, Oct 12 2021 13:49:34)</span><br><span class="line">Spark context Web UI available at http://master:4040</span><br><span class="line">Spark context available as &#x27;sc&#x27; (master = local[*], app id = local1647347826262).</span><br><span class="line">SparkSession available as &#x27;spark&#x27;.</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看WebUI界面"><a href="#查看WebUI界面" class="headerlink" title="查看WebUI界面"></a>查看WebUI界面</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">浏览器访问：</span><br><span class="line">http://master:4040/</span><br></pre></td></tr></table></figure>
+
+<h4 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate</span><br></pre></td></tr></table></figure>
+
+<h3 id="Spark-Standalone模式"><a href="#Spark-Standalone模式" class="headerlink" title="Spark-Standalone模式"></a>Spark-Standalone模式</h3><p>Standalone模式(集群) Spark中的各个角色以独立进程的形式存在,并组成Spark集群环境</p>
+<h4 id="Anaconda-On-Linux-安装-单台服务器脚本安装-注：在-slave1-和-slave2-上部署"><a href="#Anaconda-On-Linux-安装-单台服务器脚本安装-注：在-slave1-和-slave2-上部署" class="headerlink" title="Anaconda On Linux 安装 (单台服务器脚本安装 注：在 slave1 和 slave2 上部署)"></a>Anaconda On Linux 安装 (单台服务器脚本安装 注：在 slave1 和 slave2 上部署)</h4><h4 id="安装上传安装包-资料中提供的Anaconda3-2021-05-Linux-x86-64-sh文件到Linux服务器上安装-位置在-x2F-export-x2F-server-1"><a href="#安装上传安装包-资料中提供的Anaconda3-2021-05-Linux-x86-64-sh文件到Linux服务器上安装-位置在-x2F-export-x2F-server-1" class="headerlink" title="安装上传安装包: 资料中提供的Anaconda3-2021.05-Linux-x86_64.sh文件到Linux服务器上安装 位置在 &#x2F;export&#x2F;server"></a>安装上传安装包: 资料中提供的Anaconda3-2021.05-Linux-x86_64.sh文件到Linux服务器上安装 位置在 &#x2F;export&#x2F;server</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server</span><br><span class="line"># 运行文件</span><br><span class="line">sh Anaconda3-2021.05-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">过程显示：</span><br><span class="line">...</span><br><span class="line"># 出现内容选 yes</span><br><span class="line">Please answer &#x27;yes&#x27; or &#x27;no&#x27;:&#x27;</span><br><span class="line">&gt;&gt;&gt; yes</span><br><span class="line">...</span><br><span class="line"># 出现添加路径：/export/server/anaconda3</span><br><span class="line">...</span><br><span class="line">[/root/anaconda3] &gt;&gt;&gt; /export/server/anaconda3</span><br><span class="line">PREFIX=/export/server/anaconda3</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装完成后-退出终端，-重新进来-1"><a href="#安装完成后-退出终端，-重新进来-1" class="headerlink" title="安装完成后, 退出终端， 重新进来"></a>安装完成后, 退出终端， 重新进来</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">结果显示：</span><br><span class="line"># 看到这个Base开头表明安装好了.base是默认的虚拟环境.</span><br><span class="line">Last login: Tue Mar 15 15:28:59 2022 from 192.168.88.1</span><br><span class="line">(base) [root@master ~]#</span><br></pre></td></tr></table></figure>
+
+<h4 id="在-master-节点上把-x2F-bashrc-和-profile-分发给-slave1-和-slave2"><a href="#在-master-节点上把-x2F-bashrc-和-profile-分发给-slave1-和-slave2" class="headerlink" title="在 master 节点上把 .&#x2F;bashrc 和 profile 分发给 slave1 和 slave2"></a>在 master 节点上把 .&#x2F;bashrc 和 profile 分发给 slave1 和 slave2</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#分发 .bashrc :</span><br><span class="line">scp ~/.bashrc root@slave1:~/</span><br><span class="line">scp ~/.bashrc root@slave2:~/</span><br><span class="line">#分发 profile :</span><br><span class="line">scp /etc/profile/ root@slave1:/etc/</span><br><span class="line">scp /etc/profile/ root@slave2:/etc/</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建虚拟环境-pyspark-基于-python3-8-1"><a href="#创建虚拟环境-pyspark-基于-python3-8-1" class="headerlink" title="创建虚拟环境 pyspark 基于 python3.8"></a>创建虚拟环境 pyspark 基于 python3.8</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n pyspark python=3.8</span><br></pre></td></tr></table></figure>
+
+<h4 id="切换到虚拟环境内-1"><a href="#切换到虚拟环境内-1" class="headerlink" title="切换到虚拟环境内"></a>切换到虚拟环境内</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate pyspark</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">结果显示：</span><br><span class="line">(base) [root@master ~]# conda activate pyspark</span><br><span class="line">(pyspark) [root@master ~]#</span><br></pre></td></tr></table></figure>
+
+<h4 id="在虚拟环境内安装包-（有WARNING不用管）-1"><a href="#在虚拟环境内安装包-（有WARNING不用管）-1" class="headerlink" title="在虚拟环境内安装包 （有WARNING不用管）"></a>在虚拟环境内安装包 （有WARNING不用管）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyhive pyspark jieba -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+
+<h4 id="master-节点节点进入-x2F-export-x2F-server-x2F-spark-x2F-conf-修改以下配置文件"><a href="#master-节点节点进入-x2F-export-x2F-server-x2F-spark-x2F-conf-修改以下配置文件" class="headerlink" title="master 节点节点进入 &#x2F;export&#x2F;server&#x2F;spark&#x2F;conf 修改以下配置文件"></a>master 节点节点进入 &#x2F;export&#x2F;server&#x2F;spark&#x2F;conf 修改以下配置文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/spark/conf</span><br></pre></td></tr></table></figure>
+
+<h4 id="将文件-workers-template-改名为-workers，并配置文件内容"><a href="#将文件-workers-template-改名为-workers，并配置文件内容" class="headerlink" title="将文件 workers.template 改名为 workers，并配置文件内容"></a>将文件 workers.template 改名为 workers，并配置文件内容</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mv workers.template workers</span><br><span class="line">vim workers</span><br><span class="line"># localhost删除，内容追加文末：</span><br><span class="line">master</span><br><span class="line">slave1</span><br><span class="line">slave2</span><br><span class="line"># 功能: 这个文件就是指示了 当前SparkStandAlone环境下, 有哪些worker</span><br></pre></td></tr></table></figure>
+
+<h4 id="将文件-spark-env-sh-template-改名为-spark-env-sh，并配置相关内容"><a href="#将文件-spark-env-sh-template-改名为-spark-env-sh，并配置相关内容" class="headerlink" title="将文件 spark-env.sh.template 改名为 spark-env.sh，并配置相关内容"></a>将文件 spark-env.sh.template 改名为 spark-env.sh，并配置相关内容</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv spark-env.sh.template spark-env.sh</span><br><span class="line">vim spark-env.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">文末追加内容：</span><br><span class="line">## 设置JAVA安装目录</span><br><span class="line">JAVA_HOME=/export/server/jdk</span><br><span class="line">## HADOOP软件配置文件目录，读取HDFS上文件和运行YARN集群</span><br><span class="line">HADOOP_CONF_DIR=/export/server/hadoop/etc/hadoop</span><br><span class="line">YARN_CONF_DIR=/export/server/hadoop/etc/hadoop</span><br><span class="line">## 指定spark老大Master的IP和提交任务的通信端口</span><br><span class="line"># 告知Spark的master运行在哪个机器上</span><br><span class="line">export SPARK_MASTER_HOST=master</span><br><span class="line"># 告知sparkmaster的通讯端口</span><br><span class="line">export SPARK_MASTER_PORT=7077</span><br><span class="line"># 告知spark master的 webui端口</span><br><span class="line">SPARK_MASTER_WEBUI_PORT=8080</span><br><span class="line"># worker cpu可用核数</span><br><span class="line">SPARK_WORKER_CORES=1</span><br><span class="line"># worker可用内存</span><br><span class="line">SPARK_WORKER_MEMORY=1g</span><br><span class="line"># worker的工作通讯地址</span><br><span class="line">SPARK_WORKER_PORT=7078</span><br><span class="line"># worker的 webui地址</span><br><span class="line">SPARK_WORKER_WEBUI_PORT=8081</span><br><span class="line">## 设置历史服务器</span><br><span class="line"># 配置的意思是 将spark程序运行的历史日志 存到hdfs的/sparklog文件夹中</span><br><span class="line">SPARK_HISTORY_OPTS=&quot;-</span><br><span class="line">Dspark.history.fs.logDirectory=hdfs://master:8020/sparklog/ -</span><br><span class="line">Dspark.history.fs.cleaner.enabled=true&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="开启-hadoop-的-hdfs-和-yarn-集群"><a href="#开启-hadoop-的-hdfs-和-yarn-集群" class="headerlink" title="开启 hadoop 的 hdfs 和 yarn 集群"></a>开启 hadoop 的 hdfs 和 yarn 集群</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-dfs.sh</span><br><span class="line">start-yarn.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="在HDFS上创建程序运行历史记录存放的文件夹，同样-conf-文件目录下"><a href="#在HDFS上创建程序运行历史记录存放的文件夹，同样-conf-文件目录下" class="headerlink" title="在HDFS上创建程序运行历史记录存放的文件夹，同样 conf 文件目录下"></a>在HDFS上创建程序运行历史记录存放的文件夹，同样 conf 文件目录下</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -mkdir /sparklog</span><br><span class="line">hadoop fs -chmod 777 /sparklog</span><br></pre></td></tr></table></figure>
+
+<h4 id="将-spark-defaults-conf-template-改为-spark-defaults-conf-并做相关配置"><a href="#将-spark-defaults-conf-template-改为-spark-defaults-conf-并做相关配置" class="headerlink" title="将 spark-defaults.conf.template 改为 spark-defaults.conf 并做相关配置"></a>将 spark-defaults.conf.template 改为 spark-defaults.conf 并做相关配置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mv spark-defaults.conf.template spark-defaults.conf</span><br><span class="line">vim spark-defaults.conf</span><br><span class="line">文末追加内容为：</span><br><span class="line"># 开启spark的日期记录功能</span><br><span class="line">spark.eventLog.enabled true</span><br><span class="line"># 设置spark日志记录的路径</span><br><span class="line">spark.eventLog.dir hdfs://master:8020/sparklog/</span><br><span class="line"># 设置spark日志是否启动压缩</span><br><span class="line">spark.eventLog.compress true</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-log4j-properties-文件-将文件第-19-行的-log4j-rootCategory-x3D-INFO-console-改为-log4j-rootCategory-x3D-WARN-console-（即将INFO-改为-WARN-目的：输出日志-设置级别为-WARN-只输出警告和错误日志，INFO-则为输出所有信息，多数为无用信息）"><a href="#配置-log4j-properties-文件-将文件第-19-行的-log4j-rootCategory-x3D-INFO-console-改为-log4j-rootCategory-x3D-WARN-console-（即将INFO-改为-WARN-目的：输出日志-设置级别为-WARN-只输出警告和错误日志，INFO-则为输出所有信息，多数为无用信息）" class="headerlink" title="配置 log4j.properties 文件 将文件第 19 行的 log4j.rootCategory&#x3D;INFO, console 改为 log4j.rootCategory&#x3D;WARN, console （即将INFO 改为 WARN 目的：输出日志, 设置级别为 WARN 只输出警告和错误日志，INFO 则为输出所有信息，多数为无用信息）"></a>配置 log4j.properties 文件 将文件第 19 行的 log4j.rootCategory&#x3D;INFO, console 改为 log4j.rootCategory&#x3D;WARN, console （即将INFO 改为 WARN 目的：输出日志, 设置级别为 WARN 只输出警告和错误日志，INFO 则为输出所有信息，多数为无用信息）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv log4j.properties.template log4j.properties</span><br><span class="line">vim log4j.properties</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">结果显示：</span><br><span class="line">...</span><br><span class="line">18 # Set everything to be logged to the console</span><br><span class="line">19 log4j.rootCategory=WARN, console</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<h4 id="master-节点分发-spark-安装文件夹-到-slave1-和-slave2-上"><a href="#master-节点分发-spark-安装文件夹-到-slave1-和-slave2-上" class="headerlink" title="master 节点分发 spark 安装文件夹 到 slave1 和 slave2 上"></a>master 节点分发 spark 安装文件夹 到 slave1 和 slave2 上</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/</span><br><span class="line">scp -r /export/server/spark-3.2.0-bin-hadoop3.2/ slave1:$PWD</span><br><span class="line">scp -r /export/server/spark-3.2.0-bin-hadoop3.2/ slave2:$PWD</span><br></pre></td></tr></table></figure>
+
+<h4 id="在slave1-和-slave2-上做软连接"><a href="#在slave1-和-slave2-上做软连接" class="headerlink" title="在slave1 和 slave2 上做软连接"></a>在slave1 和 slave2 上做软连接</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</span><br></pre></td></tr></table></figure>
+
+<h4 id="重新加载环境变量"><a href="#重新加载环境变量" class="headerlink" title="重新加载环境变量"></a>重新加载环境变量</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h4 id="进入-x2F-export-x2F-server-x2F-spark-x2F-sbin-文件目录下-启动-start-history-server-sh"><a href="#进入-x2F-export-x2F-server-x2F-spark-x2F-sbin-文件目录下-启动-start-history-server-sh" class="headerlink" title="进入 &#x2F;export&#x2F;server&#x2F;spark&#x2F;sbin 文件目录下 启动 start-history-server.sh"></a>进入 &#x2F;export&#x2F;server&#x2F;spark&#x2F;sbin 文件目录下 启动 start-history-server.sh</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/spark/sbin</span><br><span class="line">./start-history-server.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="访问-WebUI-界面"><a href="#访问-WebUI-界面" class="headerlink" title="访问 WebUI 界面"></a>访问 WebUI 界面</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">浏览器访问：</span><br><span class="line">http://master:18080/</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动Spark的Master和Worker进程"><a href="#启动Spark的Master和Worker进程" class="headerlink" title="启动Spark的Master和Worker进程"></a>启动Spark的Master和Worker进程</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 启动全部master和worker</span><br><span class="line">sbin/start-all.sh</span><br><span class="line"># 或者可以一个个启动:</span><br><span class="line"># 启动当前机器的master</span><br><span class="line">sbin/start-master.sh</span><br><span class="line"># 启动当前机器的worker</span><br><span class="line">sbin/start-worker.sh</span><br><span class="line"># 停止全部</span><br><span class="line">sbin/stop-all.sh</span><br><span class="line"># 停止当前机器的master</span><br><span class="line">sbin/stop-master.sh</span><br><span class="line"># 停止当前机器的worker</span><br><span class="line">sbin/stop-worker.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="访问-WebUI界面"><a href="#访问-WebUI界面" class="headerlink" title="访问 WebUI界面"></a>访问 WebUI界面</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">浏览器访问：</span><br><span class="line">http://master:8080/</span><br></pre></td></tr></table></figure>
+
+<h4 id="作者"><a href="#作者" class="headerlink" title="作者"></a>作者</h4><p>Author: lixiaolong<br>Email: <a href="mailto:&#x32;&#57;&#x37;&#x31;&#55;&#50;&#54;&#x34;&#x38;&#51;&#64;&#x71;&#x71;&#x2e;&#99;&#111;&#x6d;">&#x32;&#57;&#x37;&#x31;&#55;&#50;&#54;&#x34;&#x38;&#51;&#64;&#x71;&#x71;&#x2e;&#99;&#111;&#x6d;</a><br>&#96;&#96;&#96;</p>
+
+	
+
+	
+		<span class="different-posts"><a href="/2022/05/28/Spark-local-stand-alone/" onclick="window.history.go(-1); return false;">⬅️ Go back </a></span>
+
+	
+
+</article>
+
+	</main>
+
+	<footer class="footer">
+	<div class="footer-content">
+		
+	      <div class="footer__element">
+	<p>Hi there, <br />welcome to my Blog glad you found it. Have a look around, will you?</p>
+</div>
+
+	    
+	      <div class="footer__element">
+	<h5>Check out</h5>
+	<ul class="footer-links">
+		<li class="footer-links__link"><a href="/archives">Archive</a></li>
+		
+		  <li class="footer-links__link"><a href="/atom.xml">RSS</a></li>
+	    
+		<li class="footer-links__link"><a href="/about">about page</a></li>
+		<li class="footer-links__link"><a href="/tags">Tags</a></li>
+		<li class="footer-links__link"><a href="/categories">Categories</a></li>
+	</ul>
+</div>
+
+	    
+
+		<div class="footer-credit">
+			<span>© 2022 John Doe | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/HoverBaum/meilidu-hexo">MeiliDu</a></span>
+		</div>
+
+	</div>
+
+
+</footer>
+
+
+
+</body>
+
+</html>

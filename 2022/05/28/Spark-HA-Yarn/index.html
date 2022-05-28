@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="theme-color" content="#33474d">
+	<title>Spark HA &amp; Yarn配置 | Hexo</title>
+	<link rel="stylesheet" href="/css/style.css" />
+	
+      <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+
+	<header class="header">
+		<nav class="header__nav">
+			
+				<a href="/archives" class="header__link">Archive</a>
+			
+				<a href="/tags" class="header__link">Tags</a>
+			
+				<a href="/atom.xml" class="header__link">RSS</a>
+			
+		</nav>
+		<h1 class="header__title"><a href="/">Hexo</a></h1>
+		<h2 class="header__subtitle"></h2>
+	</header>
+
+	<main>
+		<article>
+	
+		<h1>Spark HA &amp; Yarn配置</h1>
+	
+	<div class="article__infos">
+		<span class="article__date">2022-05-28</span><br />
+		
+		
+			<span class="article__tags">
+			  	<a class="article__tag-none-link" href="/tags/spark/" rel="tag">spark</a>
+			</span>
+		
+	</div>
+
+	
+
+	
+		<p>Welcome to you</p>
+<h2 id="Spark-On-YARN模式"><a href="#Spark-On-YARN模式" class="headerlink" title="Spark On YARN模式"></a>Spark On YARN模式</h2><p>在已有YARN集群的前提下在单独准备Spark StandAlone集群,对资源的利用就不高.Spark On YARN, 无 需部署Spark集群, 只要找一台服务器, 充当Spark的客户端</p>
+<h3 id="保证-HADOOP-CONF-和-DIR-YARN-CONF-DIR-已经配置在spark-env-sh-和环境变量中-（注-前面配置spark-Standlone-时已经配置过此项了）"><a href="#保证-HADOOP-CONF-和-DIR-YARN-CONF-DIR-已经配置在spark-env-sh-和环境变量中-（注-前面配置spark-Standlone-时已经配置过此项了）" class="headerlink" title="保证 HADOOP_CONF_和 DIR_YARN_CONF_DIR 已经配置在spark-env.sh 和环境变量中 （注: 前面配置spark-Standlone 时已经配置过此项了）"></a>保证 HADOOP_CONF_和 DIR_YARN_CONF_DIR 已经配置在spark-env.sh 和环境变量中 （注: 前面配置spark-Standlone 时已经配置过此项了）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">spark-env.sh 文件部分显示：</span><br><span class="line">....</span><br><span class="line">77 ## HADOOP软件配置文件目录，读取HDFS上文件和运行YARN集群</span><br><span class="line">78 HADOOP_CONF_DIR=/export/server/hadoop/etc/hadoop</span><br><span class="line">79 YARN_CONF_DIR=/export/server/hadoop/etc/hadoop</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<h3 id="链接到-YARN-中（注-交互式环境-pyspark-和-spark-shell-无法运行-cluster模式）"><a href="#链接到-YARN-中（注-交互式环境-pyspark-和-spark-shell-无法运行-cluster模式）" class="headerlink" title="链接到 YARN 中（注: 交互式环境 pyspark 和 spark-shell 无法运行 cluster模式）"></a>链接到 YARN 中（注: 交互式环境 pyspark 和 spark-shell 无法运行 cluster模式）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bin/pyspark --master yarn --deploy-mode client|cluster</span><br><span class="line"># --deploy-mode 选项是指定部署模式, 默认是 客户端模式</span><br><span class="line"># client就是客户端模式</span><br><span class="line"># cluster就是集群模式</span><br><span class="line"># --deploy-mode 仅可以用在YARN模式下</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/spark-shell --master yarn --deploy-mode client|cluster</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/spark-submit --master yarn --deploy-mode client|cluster /xxx/xxx/xxx.py</span><br><span class="line">参数</span><br></pre></td></tr></table></figure>
+
+<h3 id="spark-submit-和-spark-shell-和-pyspark的相关参数"><a href="#spark-submit-和-spark-shell-和-pyspark的相关参数" class="headerlink" title="spark-submit 和 spark-shell 和 pyspark的相关参数"></a>spark-submit 和 spark-shell 和 pyspark的相关参数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- bin/pyspark: pyspark解释器spark环境</span><br><span class="line">- bin/spark-shell: scala解释器spark环境</span><br><span class="line">- bin/spark-submit: 提交jar包或Python文件执行的工具</span><br><span class="line">- bin/spark-sql: sparksql客户端工具</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">这4个客户端工具的参数基本通用.以spark-submit 为例:</span><br><span class="line">bin/spark-submit --master spark://master:7077 xxx.py`</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">Usage: spark-submit [options] &lt;app jar | python file | R file&gt; [app</span><br><span class="line">arguments]</span><br><span class="line">Usage: spark-submit --kill [submission ID] --master [spark://...]</span><br><span class="line">Usage: spark-submit --status [submission ID] --master [spark://...]</span><br><span class="line">Usage: spark-submit run-example [options] example-class [example args]</span><br><span class="line">Options:</span><br><span class="line">--master MASTER_URL spark://host:port, mesos://host:port, yarn,</span><br><span class="line">k8s://https://host:port, or local (Default:</span><br><span class="line">local[*]).</span><br><span class="line">--deploy-mode DEPLOY_MODE 部署模式 client 或者 cluster 默认是client</span><br><span class="line">--class CLASS_NAME 运行java或者scala class(for Java / Scala apps).</span><br><span class="line">--name NAME 程序的名字</span><br><span class="line">--jars JARS Comma-separated list of jars to include on the</span><br><span class="line">driver</span><br><span class="line">and executor classpaths.</span><br><span class="line">--packages Comma-separated list of maven coordinates of</span><br><span class="line">jars to include</span><br><span class="line">on the driver and executor classpaths. Will</span><br><span class="line">search the local</span><br><span class="line">maven repo, then maven central and any</span><br><span class="line">additional remote</span><br><span class="line">repositories given by --repositories. The</span><br><span class="line">format for the</span><br><span class="line">coordinates should be</span><br><span class="line">groupId:artifactId:version.</span><br><span class="line">--exclude-packages Comma-separated list of groupId:artifactId, to</span><br><span class="line">exclude while</span><br><span class="line">resolving the dependencies provided in --</span><br><span class="line">packages to avoid</span><br><span class="line">dependency conflicts.</span><br><span class="line">--repositories Comma-separated list of additional remote</span><br><span class="line">repositories to</span><br><span class="line">search for the maven coordinates given with --</span><br><span class="line">packages.</span><br><span class="line">--py-files PY_FILES 指定Python程序依赖的其它python文件</span><br><span class="line">--files FILES Comma-separated list of files to be placed in</span><br><span class="line">the working</span><br><span class="line">directory of each executor. File paths of</span><br><span class="line">these files</span><br><span class="line">in executors can be accessed via</span><br><span class="line">SparkFiles.get(fileName).</span><br><span class="line">--archives ARCHIVES Comma-separated list of archives to be</span><br><span class="line">extracted into the</span><br><span class="line">working directory of each executor.</span><br><span class="line">--conf, -c PROP=VALUE 手动指定配置</span><br><span class="line">--properties-file FILE Path to a file from which to load extra</span><br><span class="line">properties. If not</span><br><span class="line">specified, this will look for conf/spark defaults.conf.</span><br><span class="line">--driver-memory MEM Driver的可用内存(Default: 1024M).</span><br><span class="line">--driver-java-options Driver的一些Java选项</span><br><span class="line">--driver-library-path Extra library path entries to pass to the</span><br><span class="line">driver.</span><br><span class="line">--driver-class-path Extra class path entries to pass to the</span><br><span class="line">driver. Note that</span><br><span class="line">jars added with --jars are automatically</span><br><span class="line">included in the</span><br><span class="line">classpath.</span><br><span class="line">--executor-memory MEM Executor的内存 (Default: 1G).</span><br><span class="line">--proxy-user NAME User to impersonate when submitting the</span><br><span class="line">application.</span><br><span class="line">This argument does not work with --principal /</span><br><span class="line">--keytab.</span><br><span class="line">--help, -h 显示帮助文件</span><br><span class="line">--verbose, -v Print additional debug output.</span><br><span class="line">--version, 打印版本</span><br><span class="line">Cluster deploy mode only(集群模式专属):</span><br><span class="line">--driver-cores NUM Driver可用的的CPU核数(Default: 1).</span><br><span class="line">Spark standalone or Mesos with cluster deploy mode only:</span><br><span class="line">--supervise 如果给定, 可以尝试重启Driver</span><br><span class="line">Spark standalone, Mesos or K8s with cluster deploy mode only:</span><br><span class="line">--kill SUBMISSION_ID 指定程序ID kill</span><br><span class="line">--status SUBMISSION_ID 指定程序ID 查看运行状态</span><br><span class="line">Spark standalone, Mesos and Kubernetes only:</span><br><span class="line">--total-executor-cores NUM 整个任务可以给Executor多少个CPU核心用</span><br><span class="line">Spark standalone, YARN and Kubernetes only:</span><br><span class="line">--executor-cores NUM 单个Executor能使用多少CPU核心</span><br><span class="line">Spark on YARN and Kubernetes only(YARN模式下):</span><br><span class="line">--num-executors NUM Executor应该开启几个</span><br><span class="line">--principal PRINCIPAL Principal to be used to login to KDC.</span><br><span class="line">--keytab KEYTAB The full path to the file that contains the</span><br><span class="line">keytab for the</span><br><span class="line">principal specified above.</span><br><span class="line">Spark on YARN only:</span><br><span class="line">--queue QUEUE_NAME 指定运行的YARN队列(Default: &quot;default&quot;).</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-YARN-的历史服务器"><a href="#启动-YARN-的历史服务器" class="headerlink" title="启动 YARN 的历史服务器"></a>启动 YARN 的历史服务器</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/hadoop-3.3.0/sbin</span><br><span class="line">./mr-jobhistory-daemon.sh start historyserver</span><br></pre></td></tr></table></figure>
+
+<h3 id="访问WebUI界面"><a href="#访问WebUI界面" class="headerlink" title="访问WebUI界面"></a>访问WebUI界面</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://master:19888/</span><br></pre></td></tr></table></figure>
+
+<h3 id="client-模式测试"><a href="#client-模式测试" class="headerlink" title="client 模式测试"></a>client 模式测试</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SPARK_HOME=/export/server/spark</span><br><span class="line">$&#123;SPARK_HOME&#125;/bin/spark-submit --master yarn --deploy-mode client --</span><br><span class="line">driver-memory 512m --executor-memory 512m --num-executors 1 --total executor-cores 2 $&#123;SPARK_HOME&#125;/examples/src/main/python/pi.py 3</span><br></pre></td></tr></table></figure>
+
+<h3 id="cluster-模式测试"><a href="#cluster-模式测试" class="headerlink" title="cluster 模式测试"></a>cluster 模式测试</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SPARK_HOME=/export/server/spark</span><br><span class="line">$&#123;SPARK_HOME&#125;/bin/spark-submit --master yarn --deploy-mode cluster --driver-memory 512m --executor-memory 512m --num-executors 1 --total-executor-cores</span><br><span class="line">2 --conf &quot;spark.pyspark.driver.python=/root/anaconda3/bin/python3&quot; --conf</span><br><span class="line">&quot;spark.pyspark.python=/root/anaconda3/bin/python3&quot;</span><br><span class="line">$&#123;SPARK_HOME&#125;/examples/src/main/python/pi.py 3</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="作者"><a href="#作者" class="headerlink" title="作者"></a>作者</h4><p>Author: lixiaolong<br>Email: <a href="mailto:&#x32;&#57;&#55;&#49;&#55;&#50;&#x36;&#52;&#56;&#51;&#64;&#x71;&#x71;&#46;&#x63;&#111;&#109;">&#x32;&#57;&#55;&#49;&#55;&#50;&#x36;&#52;&#56;&#51;&#64;&#x71;&#x71;&#46;&#x63;&#111;&#109;</a></p>
+<pre><code>
+</code></pre>
+
+	
+
+	
+		<span class="different-posts"><a href="/2022/05/28/Spark-HA-Yarn/" onclick="window.history.go(-1); return false;">⬅️ Go back </a></span>
+
+	
+
+</article>
+
+	</main>
+
+	<footer class="footer">
+	<div class="footer-content">
+		
+	      <div class="footer__element">
+	<p>Hi there, <br />welcome to my Blog glad you found it. Have a look around, will you?</p>
+</div>
+
+	    
+	      <div class="footer__element">
+	<h5>Check out</h5>
+	<ul class="footer-links">
+		<li class="footer-links__link"><a href="/archives">Archive</a></li>
+		
+		  <li class="footer-links__link"><a href="/atom.xml">RSS</a></li>
+	    
+		<li class="footer-links__link"><a href="/about">about page</a></li>
+		<li class="footer-links__link"><a href="/tags">Tags</a></li>
+		<li class="footer-links__link"><a href="/categories">Categories</a></li>
+	</ul>
+</div>
+
+	    
+
+		<div class="footer-credit">
+			<span>© 2022 John Doe | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/HoverBaum/meilidu-hexo">MeiliDu</a></span>
+		</div>
+
+	</div>
+
+
+</footer>
+
+
+
+</body>
+
+</html>
