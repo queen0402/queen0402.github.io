@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="theme-color" content="#33474d">
+	<title>《Kafka环境配置》 | Hexo</title>
+	<link rel="stylesheet" href="/css/style.css" />
+	
+      <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+
+	<header class="header">
+		<nav class="header__nav">
+			
+				<a href="/archives" class="header__link">Archive</a>
+			
+				<a href="/tags" class="header__link">Tags</a>
+			
+				<a href="/atom.xml" class="header__link">RSS</a>
+			
+		</nav>
+		<h1 class="header__title"><a href="/">Hexo</a></h1>
+		<h2 class="header__subtitle"></h2>
+	</header>
+
+	<main>
+		<article>
+	
+		<h1>《Kafka环境配置》</h1>
+	
+	<div class="article__infos">
+		<span class="article__date">2022-06-17</span><br />
+		
+		
+			<span class="article__tags">
+			  	<a class="article__tag-none-link" href="/tags/kafka/" rel="tag">kafka</a>
+			</span>
+		
+	</div>
+
+	
+
+	
+		<p>Welcome to you</p>
+<h2 id="Kafka环境配置"><a href="#Kafka环境配置" class="headerlink" title="Kafka环境配置"></a>Kafka环境配置</h2><h3 id="zookeeper环境配置"><a href="#zookeeper环境配置" class="headerlink" title="zookeeper环境配置"></a>zookeeper环境配置</h3><h4 id="第一步：下载zookeeeper的压缩包，下载网址如下"><a href="#第一步：下载zookeeeper的压缩包，下载网址如下" class="headerlink" title="第一步：下载zookeeeper的压缩包，下载网址如下"></a>第一步：下载zookeeeper的压缩包，下载网址如下</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://archive.apache.org/dist/zookeeper/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第二步：解压"><a href="#第二步：解压" class="headerlink" title="第二步：解压"></a>第二步：解压</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server</span><br><span class="line"># 在node1主机上，解压zookeeper的压缩包到/export/server路径下去，然后准备进行安装</span><br><span class="line">tar -zxvf zookeeper-3.4.6.tar.gz </span><br><span class="line">ln -s zookeeper-3.4.6/ zookeeper</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第三步：修改配置文件"><a href="#第三步：修改配置文件" class="headerlink" title="第三步：修改配置文件"></a>第三步：修改配置文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">在node1主机上，修改配置文件</span><br><span class="line"></span><br><span class="line">cd /export/server/zookeeper/conf/</span><br><span class="line">cp zoo_sample.cfg zoo.cfg</span><br><span class="line">mkdir -p /export/server/zookeeper/zkdatas/</span><br><span class="line">vim  zoo.cfg</span><br><span class="line">将zoo.cfg修改为以下内容</span><br><span class="line">#Zookeeper的数据存放目录</span><br><span class="line">dataDir=/export/server/zookeeper/zkdatas</span><br><span class="line"></span><br><span class="line"># 保留多少个快照</span><br><span class="line">autopurge.snapRetainCount=3</span><br><span class="line"></span><br><span class="line"># 日志多少小时清理一次</span><br><span class="line">autopurge.purgeInterval=1</span><br><span class="line"></span><br><span class="line"># 集群中服务器地址</span><br><span class="line">server.1=node1:2888:3888</span><br><span class="line">server.2=node2:2888:3888</span><br><span class="line">server.3=node3:2888:3888</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="第四步：添加myid配置"><a href="#第四步：添加myid配置" class="headerlink" title="第四步：添加myid配置"></a>第四步：添加myid配置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">在node1主机的/export/server/zookeeper/zkdatas/这个路径下创建一个文件，文件名为myid ,文件内容为1</span><br><span class="line">echo 1 &gt; /export/server/zookeeper/zkdatas/myid</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第五步：安装包分发并修改myid的值"><a href="#第五步：安装包分发并修改myid的值" class="headerlink" title="第五步：安装包分发并修改myid的值"></a>第五步：安装包分发并修改myid的值</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">在node1主机上，将安装包分发到其他机器第一台机器上面执行以下两个命令</span><br><span class="line">cd /export/server/</span><br><span class="line">scp -r /export/server/zookeeper-3.4.6/ node2:$PWD </span><br><span class="line">scp -r /export/server/zookeeper-3.4.6/ node3:$PWD</span><br><span class="line"></span><br><span class="line">第二台机器上建立软连接, 并修改myid的值为2</span><br><span class="line">cd /export/server/</span><br><span class="line">ln -s zookeeper-3.4.6/ zookeeper </span><br><span class="line">echo 2 &gt; /export/server/zookeeper/zkdatas/myid</span><br><span class="line"></span><br><span class="line">第三台机器上建立软连接, 并修改myid的值为3</span><br><span class="line">cd /export/server/</span><br><span class="line">ln -s zookeeper-3.4.6/ zookeeper </span><br><span class="line">echo 3 &gt; /export/server/zookeeper/zkdatas/myid</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="第六步：三台机器启动zookeeper服务"><a href="#第六步：三台机器启动zookeeper服务" class="headerlink" title="第六步：三台机器启动zookeeper服务"></a>第六步：三台机器启动zookeeper服务</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">三台机器分别启动zookeeper服务、这个命令三台机器都要执行</span><br><span class="line">/export/server/zookeeper/bin/zkServer.sh start</span><br><span class="line">/export/server/zookeeper/bin/zkServer.sh stop</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">vim /etc/profile </span><br><span class="line">export ZOOKEEPER_HOME=/export/server/zookeeper</span><br><span class="line">export PATH=$PATH:$ZOOKEEPER_HOME/bin</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="zookeeper环境配置-1"><a href="#zookeeper环境配置-1" class="headerlink" title="zookeeper环境配置"></a>zookeeper环境配置</h3><h4 id="第一步：上传安装包"><a href="#第一步：上传安装包" class="headerlink" title="第一步：上传安装包"></a>第一步：上传安装包</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">移动到指定文件夹</span><br><span class="line">mv kafka_2.11-2.0.0.tgz /export/server</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="第二步：解压将文件上传到-x2F-export-x2F-server-里面-，解压"><a href="#第二步：解压将文件上传到-x2F-export-x2F-server-里面-，解压" class="headerlink" title="第二步：解压将文件上传到 &#x2F;export&#x2F;server 里面 ，解压"></a>第二步：解压将文件上传到 &#x2F;export&#x2F;server 里面 ，解压</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf kafka_2.11-2.0.0.tgz</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="第二步：修改配置文件"><a href="#第二步：修改配置文件" class="headerlink" title="第二步：修改配置文件"></a>第二步：修改配置文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(1)进入配置文件目录cd /export/server/kafka_2.11-2.0.0/config</span><br><span class="line">(2)编辑配置文件</span><br></pre></td></tr></table></figure>
+
+<h4 id="第三步：添加环境变量"><a href="#第三步：添加环境变量" class="headerlink" title="第三步：添加环境变量"></a>第三步：添加环境变量</h4><p>vi server.properties </p>
+<p>#为依次增长的:0、1、2、3、4,集群中唯一 id<br>broker.id&#x3D;0 –》从0开始，每台不能重复</p>
+<p>—-socket server setting——-</p>
+<p>Listeners &#x3D; plaintext:&#x2F;&#x2F;:9092通信用的是明文传递（加密ssl 改成：Listeners &#x3D; plaintext:&#x2F;&#x2F;node1:9092 —》拓展netstat -ntlp  8020&#x2F;9020 namenode的rpc连接端口</p>
+<p>Advertised.listeners–》云服务的配置（目前不用管）</p>
+<p>Socket.request.max.bytes –》一个请求最多接收多少数据，不能超过这么大，会被拒绝</p>
+<p>—-Logbasic——<br>#数据存储的目录<br>log.dirs&#x3D;&#x2F;export&#x2F;server&#x2F;data&#x2F;kafka-logs </p>
+<p>#默认分区数<br>Num.partitions &#x3D; 1</p>
+<p>—-Log flush policy—-<br>数据安全性（持久化之前先放到缓存上，从缓存刷到磁盘上）interval.messages     interval.ms</p>
+<p>—-Log retention policy—-<br>数据保留策略 168&#x2F;24&#x3D;7，1073741824&#x2F;1024&#x3D;1GB，300000ms &#x3D; 300s &#x3D; 5min超过了删掉<br>（最后修改时间还是创建时间-》日志段中最晚的一条消息，维护这个最大的时间戳–》用户无法干预）<br>—zookeeper—-<br>#指定 zk 集群地址<br>zookeeper.connect&#x3D;node1:2181,node2:2181,node3:2181<br>—-group coordinator setting 组协调设置—–<br>Reblance–》3s，3000ms 重新负载的等待延迟–》太小了会一直在负载（等3s再负载，网络抖动等）</p>
+<h4 id="第四步：分发kafka"><a href="#第四步：分发kafka" class="headerlink" title="第四步：分发kafka"></a>第四步：分发kafka</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/</span><br><span class="line">scp -r /export/server/kafka_2.11-2.0.0/ node2:$PWD</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第五步：配置环境变量"><a href="#第五步：配置环境变量" class="headerlink" title="第五步：配置环境变量"></a>第五步：配置环境变量</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile </span><br><span class="line">export KAFKA_HOME=/export/server/kafka </span><br><span class="line">export PATH=$PATH:$KAFKA_HOME/bin </span><br><span class="line">source /etc/profile </span><br><span class="line">注意:还需要分发环境变量</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="第六步：分别在-node2-和-node3-上修改配置文件"><a href="#第六步：分别在-node2-和-node3-上修改配置文件" class="headerlink" title="第六步：分别在 node2 和 node3 上修改配置文件"></a>第六步：分别在 node2 和 node3 上修改配置文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">broker.id=1 broker.id=2(broker.id 不能重复)</span><br><span class="line">Listeners = plaintext://node2:9092 /Listeners = plaintext://node3:9092 </span><br><span class="line">kafka-server-start.sh -daemon /export/server/kafka/config/server.properties </span><br><span class="line">停止集群</span><br><span class="line">kafka-server-stop.sh stop</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="作者"><a href="#作者" class="headerlink" title="作者"></a>作者</h4><p>Author: lixiaolong<br>Email: <a href="mailto:&#50;&#x39;&#x37;&#49;&#x37;&#50;&#x36;&#52;&#56;&#x33;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#x6d;">&#50;&#x39;&#x37;&#49;&#x37;&#50;&#x36;&#52;&#56;&#x33;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#x6d;</a><br>&#96;&#96;&#96;</p>
+
+	
+
+	
+		<span class="different-posts"><a href="/2022/06/17/Kafka%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" onclick="window.history.go(-1); return false;">⬅️ Go back </a></span>
+
+	
+
+</article>
+
+	</main>
+
+	<footer class="footer">
+	<div class="footer-content">
+		
+	      <div class="footer__element">
+	<p>Hi there, <br />welcome to my Blog glad you found it. Have a look around, will you?</p>
+</div>
+
+	    
+	      <div class="footer__element">
+	<h5>Check out</h5>
+	<ul class="footer-links">
+		<li class="footer-links__link"><a href="/archives">Archive</a></li>
+		
+		  <li class="footer-links__link"><a href="/atom.xml">RSS</a></li>
+	    
+		<li class="footer-links__link"><a href="/about">about page</a></li>
+		<li class="footer-links__link"><a href="/tags">Tags</a></li>
+		<li class="footer-links__link"><a href="/categories">Categories</a></li>
+	</ul>
+</div>
+
+	    
+
+		<div class="footer-credit">
+			<span>© 2022 John Doe | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/HoverBaum/meilidu-hexo">MeiliDu</a></span>
+		</div>
+
+	</div>
+
+
+</footer>
+
+
+
+</body>
+
+</html>

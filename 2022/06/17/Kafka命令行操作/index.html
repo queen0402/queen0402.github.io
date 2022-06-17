@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="theme-color" content="#33474d">
+	<title>《Kafka环境配置》 | Hexo</title>
+	<link rel="stylesheet" href="/css/style.css" />
+	
+      <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+
+	<header class="header">
+		<nav class="header__nav">
+			
+				<a href="/archives" class="header__link">Archive</a>
+			
+				<a href="/tags" class="header__link">Tags</a>
+			
+				<a href="/atom.xml" class="header__link">RSS</a>
+			
+		</nav>
+		<h1 class="header__title"><a href="/">Hexo</a></h1>
+		<h2 class="header__subtitle"></h2>
+	</header>
+
+	<main>
+		<article>
+	
+		<h1>《Kafka环境配置》</h1>
+	
+	<div class="article__infos">
+		<span class="article__date">2022-06-17</span><br />
+		
+		
+			<span class="article__tags">
+			  	<a class="article__tag-none-link" href="/tags/kafka/" rel="tag">kafka</a>
+			</span>
+		
+	</div>
+
+	
+
+	
+		<p>Welcome to you</p>
+<h2 id="Kafka命令行操作"><a href="#Kafka命令行操作" class="headerlink" title="Kafka命令行操作"></a>Kafka命令行操作</h2><h3 id="四部分"><a href="#四部分" class="headerlink" title="四部分"></a>四部分</h3><h4 id="第一步：Kafka命令行工具的基本概念"><a href="#第一步：Kafka命令行工具的基本概念" class="headerlink" title="第一步：Kafka命令行工具的基本概念"></a>第一步：Kafka命令行工具的基本概念</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">kafka-topics.sh 查看帮助</span><br><span class="line">kafka-topics.sh --list --zookeeper node1:2181,node2:2181,node3:2181（啥都没有） </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第二步：Kafka命令行topic操作"><a href="#第二步：Kafka命令行topic操作" class="headerlink" title="第二步：Kafka命令行topic操作"></a>第二步：Kafka命令行topic操作</h4><h5 id="（1）创建-topic"><a href="#（1）创建-topic" class="headerlink" title="（1）创建 topic"></a>（1）创建 topic</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">基本方式</span><br><span class="line">./kafka-topics.sh --zookeeper node1:2181,node2:2181,node3:2181 --create --replication-factor 3 --partitions 3 --topic test</span><br><span class="line"></span><br><span class="line">--replication-factor 副本数量</span><br><span class="line">--partitions 分区数量</span><br><span class="line">--topic topic 名称</span><br><span class="line">手动指定副本的存储位置</span><br><span class="line">bin/kafka-topics.sh --create --topic tpc_1 --zookeeper node1:2181 --replica-assignment 0:1,1:2</span><br><span class="line">该方式下,命令会自动判断所要创建的 topic 的分区数及副本数</span><br><span class="line">--replica-assignment 不能同时使用--partitions --replication-factor参数。指定partition的AR列表，未指定AR列表则会根据负载均衡算法将partition的replica均衡的分布在Kafka集群中。</span><br><span class="line">--replica-assignment 1:3,2:1,3:2，逗号区分不同的partition，冒号区别相同partition中的replica，partition-0的AR=[1,3]，partition-1的AR=[2,1]，partition-2的AR=[3,2]。</span><br><span class="line">Eg：testMcdull222AR列表计算出来时--replica-assignment 2:3,1:3,1:2 。</span><br><span class="line">--replica-assignment 参数一般不由用户指定，由Kafka默认分配算法保证，有两个原则：</span><br><span class="line">（1）使Topic的所有Partition Replica能够均匀地分配至各个Kafka Broker（负载均衡）；</span><br><span class="line">（2）Partition 内的replica能够均匀地分配在不同Kafka Broker。如果Partition的第一个Replica分配至某一个Kafka Broker，那么这个Partition的其它Replica则需要分配至其它的Kafka Brokers，即Partition Replica分配至不同的Broker；</span><br><span class="line">1、从Broker随机位置开始按照轮询方式选择每个Partition的第一个replica</span><br><span class="line">2、不同Partition剩余replica按照一定的偏移量紧跟着各自的第一个replica</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="（2）删除-topic"><a href="#（2）删除-topic" class="headerlink" title="（2）删除 topic"></a>（2）删除 topic</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">bin/kafka-topics.sh  --delete --topic tpc_1 --zookeeper node1：2181</span><br><span class="line"></span><br><span class="line">（异步线程去删除）删除 topic,需要一个参数处于启用状态: delete.topic.enable = true,否则删不掉</span><br><span class="line"></span><br><span class="line">使用 kafka-topics .sh 脚本删除主题的行为本质上只是在 ZooKeeper 中的 /admin/delete_topics 路径下 建一个与待删除主题同名的节点,以标记该主题为待删除的状态。与创建主题相同的是,真正删除主题的动作也是由 Kafka 的控制器负责完成的。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="（3）查看-topic"><a href="#（3）查看-topic" class="headerlink" title="（3）查看 topic"></a>（3）查看 topic</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">(1)列出当前系统中的所有 topic </span><br><span class="line">bin/kafka-topics.sh --zookeeper node1:2181,node2:2181,node3:2181 –list</span><br><span class="line">(2)查看 topic 详细信息</span><br><span class="line">bin/kafka-topics.sh --create --topic tpc_1   --zookeeper node1:2181 --replica-assignment 0:1,1:2</span><br><span class="line">bin/kafka-topics.sh --describe --topic tpc_1 --zookeper node1:2181 </span><br><span class="line">	 Topic: tpc_1 PartitionCount:2 ReplicationFactor:2 Configs: </span><br><span class="line">	 Topic: tpc_1 Partition: 0 Leader: 0 Replicas: 0,1 Isr: 0,1</span><br><span class="line">	 Topic: tpc_1 Partition: 1 Leader: 1 Replicas: 1,2 Isr: 1,2</span><br><span class="line"></span><br><span class="line">从上面的结果中, 可以看出, topic 的分区数量, 以及每个分区的副本数量, 以及每个副本所在的 broker 节点,以及每个分区的 leader 副本所在 broker 节点,以及每个分区的 ISR 副本列表; </span><br><span class="line"></span><br><span class="line">ISR: in sync replicas 同步副本(当然也包含 leader 自身) </span><br><span class="line">OSR:out of sync replicas 失去同步的副本(数据与 leader 之间的差距超过配置的阈值)</span><br><span class="line">ISR:In Sync Replica</span><br><span class="line">kafka不是完全同步，也不是完全异步</span><br><span class="line">1.leader会维持一个与其保持同步的replica集合，该集合就是ISR，每一个partition都有一个ISR，它时有leader动态维护。</span><br><span class="line"></span><br><span class="line">2.我们要保证kafka不丢失message，就要保证ISR这组集合存活（至少有一个存活），并且消息commit成功。</span><br><span class="line"></span><br><span class="line">AR：  Assigned Replicas的缩写，是每个partition下所有副本（replicas）的统称；</span><br><span class="line">ISR： In-Sync Replicas的缩写，是指副本同步队列，ISR是AR中的一个子集；</span><br><span class="line"></span><br><span class="line">LEO：LogEndOffset的缩写，表示每个partition的log最后一条Message的位置。</span><br><span class="line">HW： HighWatermark的缩写，是指consumer能够看到的此partition的位置。 取一个partition对应的ISR中最小的LEO作为HW，consumer最多只能消费到HW所在的位置。</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="（4）增加分区数"><a href="#（4）增加分区数" class="headerlink" title="（4）增加分区数"></a>（4）增加分区数</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --alter --topic tpc_1 --partitions 3 --zookeeper node1:2181</span><br><span class="line"></span><br><span class="line">Kafka 只支持增加分区,不支持减少分区</span><br><span class="line">原因是:减少分区,代价太大(数据的转移,日志段拼接合并) </span><br><span class="line"></span><br><span class="line">如果真的需要实现此功能,则完全可以重新创建一个分区数较小的主题,然后将现有主题中的消息按照既定的逻辑复制过去;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="（5）动态配置-topic-参数"><a href="#（5）动态配置-topic-参数" class="headerlink" title="（5）动态配置 topic 参数"></a>（5）动态配置 topic 参数</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">通过管理命令,可以为已创建的 topic 增加、修改、删除 topic level 参数</span><br><span class="line"></span><br><span class="line">添加、修改配置参数（开启压缩发送传输种提高kafka消息吞吐量的有效办法(‘gzip’, ‘snappy’, ‘lz4’, ‘zstd’)）</span><br><span class="line">bin/kafka-configs.sh --zookeeper node1:2181 --entity-type topics --entity-name tpc_1 --alter --add-config compression.type=gzip </span><br><span class="line"></span><br><span class="line">删除配置参数</span><br><span class="line">bin/kafka-configs.sh --zookeeper node1:2181 --entity-type topics --entity-name tpc_1 --alter --delete-config compression.type</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="第三步：Kafka命令行生产者与消费者操作"><a href="#第三步：Kafka命令行生产者与消费者操作" class="headerlink" title="第三步：Kafka命令行生产者与消费者操作"></a>第三步：Kafka命令行生产者与消费者操作</h4><h5 id="（1）生产者-kafka-console-producer"><a href="#（1）生产者-kafka-console-producer" class="headerlink" title="（1）生产者:kafka-console-producer"></a>（1）生产者:kafka-console-producer</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">bin/kafka-console-producer.sh --broker-list node1:9092, node2:9092, node3:9092 --topic tpc_1</span><br><span class="line"></span><br><span class="line">&gt;hello word </span><br><span class="line">&gt;kafka </span><br><span class="line">&gt;nihao</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="（2）消费者-kafka-console-consumer"><a href="#（2）消费者-kafka-console-consumer" class="headerlink" title="（2）消费者:kafka-console-consumer"></a>（2）消费者:kafka-console-consumer</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">(1)消费消息</span><br><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092, node2:9092, node1:9092 --topic tpc_1 --from-beginning(从头开始)</span><br><span class="line"></span><br><span class="line">(2)#指定要消费的分区,和要消费的起始 offset </span><br><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092,node2:9092,node3:9092 --topic tcp_1 --offset 2 --partition 0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="第四步：Kafka命令行配置管理"><a href="#第四步：Kafka命令行配置管理" class="headerlink" title="第四步：Kafka命令行配置管理"></a>第四步：Kafka命令行配置管理</h4><h5 id="配置管理-kafka-configs"><a href="#配置管理-kafka-configs" class="headerlink" title="配置管理 kafka-configs"></a>配置管理 kafka-configs</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">kafka-configs.sh 脚本是专门用来对配置进行操作的, 这里的操作是运行状态修改原有的配置, 如此可以达到动态变更的目; </span><br><span class="line"></span><br><span class="line">kafka-configs.sh 脚本包含:变更 alter、查看 describe 这两种指令类型。同使用 kafka-topics.sh 脚本变更配置一样,增、删、改的行为都可以看做变更操作,不过 kafka-configs. sh 脚本不仅可支持操作主题相关的配置,还支持操 broker 、用户和客户端这 3 个类型的配置。</span><br><span class="line"></span><br><span class="line">kafka-configs.sh 脚本使用 entity-type 参数来指定操作配置的类型, 并且使 entity-name 参数来指定操作配置的名称。</span><br><span class="line"></span><br><span class="line">比如查看 topic 的配置可以按如下方式执行:</span><br><span class="line"> bin/kafka-configs.sh zookeeper node1: 2181 --describe --entity-type topics --entity-name tpc_2 </span><br><span class="line"></span><br><span class="line">比如查看 broker 的动态配置可以按如下方式执行:</span><br><span class="line"> bin/kafka-configs.sh zookeeper node1: 2181 --describe --entity-type brokers --entity-name 0 --zookeeper node1:2181</span><br><span class="line"></span><br><span class="line">示例:添加 topic 级别参数</span><br><span class="line">bin/kafka-configs.sh --zookeeper localhost:2181 --alter --entity-type topics --entity-name tpc_2 --add-config cleanup.policy=compact , max.message.bytes=10000</span><br><span class="line">使用 kafka-configs.sh 脚本来变更( alter )配置时,会在 ZooKeeper 中创建一个命名形式为: /config/&lt;entity-type&gt;/&lt;ent ity name &gt;的节点,并将变更的配置写入这个节点</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="作者"><a href="#作者" class="headerlink" title="作者"></a>作者</h4><p>Author: lixiaolong<br>Email: <a href="mailto:&#50;&#x39;&#55;&#x31;&#55;&#50;&#x36;&#52;&#x38;&#51;&#64;&#x71;&#x71;&#46;&#x63;&#x6f;&#109;">&#50;&#x39;&#55;&#x31;&#55;&#50;&#x36;&#52;&#x38;&#51;&#64;&#x71;&#x71;&#46;&#x63;&#x6f;&#109;</a><br>&#96;&#96;&#96;</p>
+
+	
+
+	
+		<span class="different-posts"><a href="/2022/06/17/Kafka%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9C/" onclick="window.history.go(-1); return false;">⬅️ Go back </a></span>
+
+	
+
+</article>
+
+	</main>
+
+	<footer class="footer">
+	<div class="footer-content">
+		
+	      <div class="footer__element">
+	<p>Hi there, <br />welcome to my Blog glad you found it. Have a look around, will you?</p>
+</div>
+
+	    
+	      <div class="footer__element">
+	<h5>Check out</h5>
+	<ul class="footer-links">
+		<li class="footer-links__link"><a href="/archives">Archive</a></li>
+		
+		  <li class="footer-links__link"><a href="/atom.xml">RSS</a></li>
+	    
+		<li class="footer-links__link"><a href="/about">about page</a></li>
+		<li class="footer-links__link"><a href="/tags">Tags</a></li>
+		<li class="footer-links__link"><a href="/categories">Categories</a></li>
+	</ul>
+</div>
+
+	    
+
+		<div class="footer-credit">
+			<span>© 2022 John Doe | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/HoverBaum/meilidu-hexo">MeiliDu</a></span>
+		</div>
+
+	</div>
+
+
+</footer>
+
+
+
+</body>
+
+</html>

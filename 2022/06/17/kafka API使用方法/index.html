@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="theme-color" content="#33474d">
+	<title>《Kafka环境配置》 | Hexo</title>
+	<link rel="stylesheet" href="/css/style.css" />
+	
+      <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+
+	<header class="header">
+		<nav class="header__nav">
+			
+				<a href="/archives" class="header__link">Archive</a>
+			
+				<a href="/tags" class="header__link">Tags</a>
+			
+				<a href="/atom.xml" class="header__link">RSS</a>
+			
+		</nav>
+		<h1 class="header__title"><a href="/">Hexo</a></h1>
+		<h2 class="header__subtitle"></h2>
+	</header>
+
+	<main>
+		<article>
+	
+		<h1>《Kafka环境配置》</h1>
+	
+	<div class="article__infos">
+		<span class="article__date">2022-06-17</span><br />
+		
+		
+			<span class="article__tags">
+			  	<a class="article__tag-none-link" href="/tags/kafka/" rel="tag">kafka</a>
+			</span>
+		
+	</div>
+
+	
+
+	
+		<p>Welcome to you</p>
+<h2 id="kafka-API使用方法"><a href="#kafka-API使用方法" class="headerlink" title="kafka API使用方法"></a>kafka API使用方法</h2><h3 id="三部分"><a href="#三部分" class="headerlink" title="三部分"></a>三部分</h3><h4 id="第一步：生产者api参数发送方式（发后即忘）"><a href="#第一步：生产者api参数发送方式（发后即忘）" class="headerlink" title="第一步：生产者api参数发送方式（发后即忘）"></a>第一步：生产者api参数发送方式（发后即忘）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">创建生产者实例和构建消息之后 就可以开始发送消息了。发送消息主要有 3 种模式:</span><br><span class="line"></span><br><span class="line">发后即忘( fire-and-forget) --&gt;天文领域</span><br><span class="line">发后即忘,它只管往 Kafka 发送,并不关心消息是否正确到达。</span><br><span class="line">在大多数情况下,这种发送方式没有问题; </span><br><span class="line">不过在某些时候(比如发生不可重试异常时)会造成消息的丢失。</span><br><span class="line">这种发送方式的性能最高,可靠性最差。</span><br><span class="line">Future&lt;RecordMetadata&gt; send = producer.send(rcd);--》也是异步</span><br><span class="line">没成功的话，producer也不管了</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第二步：生产者api参数发送方式（同步发送）"><a href="#第二步：生产者api参数发送方式（同步发送）" class="headerlink" title="第二步：生产者api参数发送方式（同步发送）"></a>第二步：生产者api参数发送方式（同步发送）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">同步发送(sync ) </span><br><span class="line">try &#123;</span><br><span class="line">	producer.send(rcd).get( ); --》一旦调用get方法，就会阻塞</span><br><span class="line">&#125; catch (Exception e) &#123; </span><br><span class="line">	e.printStackTrace( );</span><br><span class="line"> &#125;</span><br><span class="line">0.8.x 前,有一个参数 producer.type=sycn|asycn 来决定生产者的发送模式;</span><br><span class="line">现已失效(其实，新版中,producer 在底层只有异步方式，若想同步，发送一次，get一次就可实现)</span><br><span class="line"></span><br><span class="line">Future  future = Callable.run( )  有返回值，future.get（）</span><br><span class="line">runnable.run（）无返回值</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="第三步：生产者api参数发送方式（异步发送）"><a href="#第三步：生产者api参数发送方式（异步发送）" class="headerlink" title="第三步：生产者api参数发送方式（异步发送）"></a>第三步：生产者api参数发送方式（异步发送）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">异步发送(async ) </span><br><span class="line">回调函数会在 producer 收到 ack 时调用,为异步调用,该方法有两个参数,分别是 RecordMetadata 和Exception,如果 Exception 为 null,说明消息发送成功,如果 Exception 不为 null,说明消息发送失败。</span><br><span class="line"></span><br><span class="line">注意:消息发送失败会自动重试,不需要我们在回调函数中手动重试。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><h5 id="1-Kafka生产者api示例"><a href="#1-Kafka生产者api示例" class="headerlink" title="1.Kafka生产者api示例"></a>1.Kafka生产者api示例</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">一个正常的生产逻辑需要具备以下几个步骤</span><br><span class="line">(1)配置生产者客户端参数及创建相应的生产者实例</span><br><span class="line">(2)构建待发送的消息</span><br><span class="line">(3)发送消息</span><br><span class="line">(4)关闭生产者实例</span><br><span class="line">Producer java api</span><br><span class="line">首先,引入 maven 依赖</span><br><span class="line">&lt;dependency&gt; </span><br><span class="line">	&lt;groupId&gt;org.apache.kafka&lt;/groupId&gt; </span><br><span class="line">	&lt;artifactId&gt;kafka-clients&lt;/artifactId&gt; </span><br><span class="line">	&lt;version&gt;2.0.0&lt;/version&gt; </span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">采用默认分区方式将消息散列的发送到各个分区当中</span><br><span class="line">import org.apache.kafka.clients.producer.KafkaProducer; </span><br><span class="line">import org.apache.kafka.clients.producer.Producer; </span><br><span class="line">import org.apache.kafka.clients.producer.ProducerRecord; </span><br><span class="line">import java.util.Properties; </span><br><span class="line">public class MyProducer &#123; </span><br><span class="line">public static void main(String[ ] args) throws InterruptedException &#123; </span><br><span class="line">Properties props = new Properties(); </span><br><span class="line">//设置 kafka 集群的地址\</span><br><span class="line">props.put(&quot;bootstrap.servers&quot;, &quot;node1:9092,node2:9092,node3:9092&quot;);</span><br><span class="line">//ack 模式,取值有 0,1,-1(all) , all 是最慢但最安全的，</span><br><span class="line">0不等响应就继续发（可靠性低），1leader会写到本地日志后，然后给响应，producer拿到响应才继续发（follwer还没同步）</span><br><span class="line">props.put(“acks”, “all”); --》很重要</span><br><span class="line">props.put(“retries”, 3); //失败重试次数-&gt;失败会自动重试（可恢复/不可恢复）--&gt;(有可能会造成数据的乱序)</span><br><span class="line">props.put(“batch.size”, 10); //数据发送的批次大小提高效率/吞吐量太大会数据延迟</span><br><span class="line">props.put(&quot;linger.ms&quot;, 10000); //消息在缓冲区保留的时间,超过设置的值就会被提交到服务端</span><br><span class="line">props.put(&quot;max.request.size&quot;,10); //数据发送请求的最大缓存数</span><br><span class="line">props.put(“buffer.memory”, 10240); //整个 Producer 用到总内存的大小,如果缓冲区满了会提交数据到服务端</span><br><span class="line">//buffer.memory 要大于 batch.size,否则会报申请内存不足的错误降低阻塞的可能性</span><br><span class="line">props.put(&quot;key.serializer&quot;, &quot;org.apache.kafka.common.serialization.StringSerializer&quot;); //key-value序列化器</span><br><span class="line">props.put(“value.serializer”, “org.apache.kafka.common.serialization.StringSerializer”);字符串最好</span><br><span class="line">Producer&lt;String, String&gt; producer = new KafkaProducer&lt;&gt;(props); </span><br><span class="line">for (int i = 0; i &lt; 100; i++) </span><br><span class="line">producer.send(new ProducerRecord&lt;String, String&gt;(&quot;test&quot;, Integer.toString(i), &quot;dd:&quot;+i)); //Thread.sleep(1000000); producer.close(); &#125; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-必要参数配置"><a href="#2-必要参数配置" class="headerlink" title="2.必要参数配置"></a>2.必要参数配置</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">消息对象 ProducerRecord,它并不是单纯意义上的消息,它包含了多个属性,原本需要发送的与业务关的消息体只是其中的一个 value 属性 ,比“ Hello, rgzn!&quot;只是 ProducerRecord 对象的一个属性。 ProducerRecord 类的定义如下:</span><br><span class="line">public class ProducerRecord&lt;K, V&gt; &#123; </span><br><span class="line">	private final String topic; </span><br><span class="line">	private final Integer partition;</span><br><span class="line">	private final Headers headers; </span><br><span class="line">	private final K key; </span><br><span class="line">	private final V value; </span><br><span class="line">	private final Long timestamp;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="作者"><a href="#作者" class="headerlink" title="作者"></a>作者</h4><p>Author: lixiaolong<br>Email: <a href="mailto:&#50;&#57;&#x37;&#49;&#x37;&#50;&#54;&#52;&#x38;&#x33;&#64;&#x71;&#x71;&#x2e;&#99;&#111;&#109;">&#50;&#57;&#x37;&#49;&#x37;&#50;&#54;&#52;&#x38;&#x33;&#64;&#x71;&#x71;&#x2e;&#99;&#111;&#109;</a><br>&#96;&#96;&#96;</p>
+
+	
+
+	
+		<span class="different-posts"><a href="/2022/06/17/kafka%20API%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" onclick="window.history.go(-1); return false;">⬅️ Go back </a></span>
+
+	
+
+</article>
+
+	</main>
+
+	<footer class="footer">
+	<div class="footer-content">
+		
+	      <div class="footer__element">
+	<p>Hi there, <br />welcome to my Blog glad you found it. Have a look around, will you?</p>
+</div>
+
+	    
+	      <div class="footer__element">
+	<h5>Check out</h5>
+	<ul class="footer-links">
+		<li class="footer-links__link"><a href="/archives">Archive</a></li>
+		
+		  <li class="footer-links__link"><a href="/atom.xml">RSS</a></li>
+	    
+		<li class="footer-links__link"><a href="/about">about page</a></li>
+		<li class="footer-links__link"><a href="/tags">Tags</a></li>
+		<li class="footer-links__link"><a href="/categories">Categories</a></li>
+	</ul>
+</div>
+
+	    
+
+		<div class="footer-credit">
+			<span>© 2022 John Doe | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/HoverBaum/meilidu-hexo">MeiliDu</a></span>
+		</div>
+
+	</div>
+
+
+</footer>
+
+
+
+</body>
+
+</html>
